@@ -1,0 +1,6 @@
+# KiCAD adds a lot of clutter
+*.bak
+*.kicad_prl
+*-backups/
+fp-info-cache
+_autosave-*
