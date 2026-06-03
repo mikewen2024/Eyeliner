@@ -20,6 +20,8 @@ A 1lb (antweight) melty-brain combat robot built for **Design Print Destroy**, i
 ![Graph Graphic](./docs/images/eyeliner_pcb_v2_back.png)
 ![Graph Graphic](./docs/images/soldered_v2_pcb.png)
 
+**Key Features:**
+
 - Extensive consideration for signal integrity, decoupling and bulk capacitance, and transients protection on all vulnerable MCU GPIO ports
 - Made to run on 4s-6s LiHV with minimal changes (TVS diode change), interface with a range of possible sensors, and run interchangeably with antweight and beetleweight electronics
 - Interchangeable high-kv 2207 "pacer" motors (outright top-range hitting power) and low-kv 2822 motors (faster spin-up with less current draw)
@@ -32,3 +34,27 @@ A 1lb (antweight) melty-brain combat robot built for **Design Print Destroy**, i
 - Up to 2500W burst capacity on HV side via solder busses, structural stability via extensive via stitching
 - Spare GPIO connections for thermistors, IR sensors, etc...
 - DSHOT600 and DSHOT1200 for high rate and accurate motor torque control at speed, built-in twisted-pairs for signal lines with GND return paths as close as possible to ESC grounds
+
+**Upcoming Changes:** 
+
+- Dual LSM6DSV320X IMUs
+- More robust LDO system for 5V side
+- Precharge circuit for higher-voltage inputs
+- Two-way DSHOT for traction control
+- Easily-removable high-speed connectors for ESCs
+- Switch to STM32 for higher clock speeds, ESP32 for telemetry and LED control only
+- Custom sensored ESCs
+- Custom BMS
+
+---
+
+### Byeliner — Beetleweight Upscale V0 *(March 2026 – Present)*
+**Class:** 3lb (beetleweight)
+**Hardware Changes:** Oversize 790 kV 3548 motors, dual 80A 8s-capable VORTEX F65 ESCs, dual 4s LiHV batteries
+
+![Graph Graphic](./docs/images/Byeliner_v0_bottom.png)
+![Graph Graphic](./docs/images/Byeliner_v0_scuffed_elec.jpeg)
+
+A 3lb version ("Byeliner") built for **Robobrawl**, early April 2026. The chassis is a rigid CURV and aluminum skeleton wrapped in TPU. On the code side, we are also moving towards platformIO for more organized operation.
+
+---

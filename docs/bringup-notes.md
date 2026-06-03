@@ -5,7 +5,6 @@
 
 ## Latest Iterations
 
-
 ### Byeliner — Beetleweight Upscale V0 *(March 2026 – Present)*
 **Class:** 3lb (beetleweight)
 **Hardware Changes:** Oversize 790 kV 3548 motors, dual 80A 8s-capable VORTEX F65 ESCs, dual 4s LiHV batteries
