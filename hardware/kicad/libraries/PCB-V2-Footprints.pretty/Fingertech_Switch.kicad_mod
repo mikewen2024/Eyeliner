@@ -1,0 +1,99 @@
+(footprint "Fingertech_Switch"
+	(version 20240108)
+	(generator "pcbnew")
+	(generator_version "8.0")
+	(layer "F.Cu")
+	(property "Reference" "REF**"
+		(at 22.86 -5.58 0)
+		(unlocked yes)
+		(layer "F.SilkS")
+		(uuid "f389b038-5ad4-4c11-8f09-f4a3bfba8830")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.1)
+			)
+		)
+	)
+	(property "Value" "~"
+		(at 22.86 -4.08 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(uuid "0f8699da-f068-4973-af9e-122d24b1179d")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Footprint" "V1 Eyeliner PCB Components:Fingertech_Switch"
+		(at 22.86 -5.08 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "18cf8a8c-8ceb-4d6d-85b1-d9829487aaaa")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 22.86 -5.08 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "b7b1a3f9-ac17-4498-82f7-d33cfcbdfb7a")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Description" ""
+		(at 22.86 -5.08 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "3f1f2be2-9b8d-44ee-b88a-56e4d6593fd0")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(fp_text user "${REFERENCE}"
+		(at 22.86 -2.58 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(uuid "a63d258f-897d-47d5-879b-1a9b3ae71c88")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(pad "IN" smd rect
+		(at 2.54 -5)
+		(size 6 5)
+		(drill oval
+			(offset -0.75 -0.786)
+		)
+		(layers "B.Cu" "B.Paste" "B.Mask")
+		(uuid "5961a4f3-24b4-4f0e-a1d1-ae2cd6f76f47")
+	)
+	(pad "OUT" smd rect
+		(at 2.54 -3)
+		(size 6 5)
+		(drill oval
+			(offset -0.75 0.357)
+		)
+		(layers "F.Cu" "F.Paste" "F.Mask")
+		(uuid "87dc013f-2788-453d-b7e7-402086035af0")
+	)
+)

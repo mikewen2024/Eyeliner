@@ -1,0 +1,5 @@
+(sym_lib_table
+  (version 7)
+  (lib (name "Seeduino XIAO")(type "Legacy")(uri "/Users/mikewen/Downloads/Seeeduino XIAO KICAD/Seeeduino XIAO.lib")(options "")(descr ""))
+  (lib (name "Eyeliner_PCB_Misc_Components")(type "KiCad")(uri "${KIPRJMOD}/Eyeliner_PCB_Misc_Components.kicad_sym")(options "")(descr ""))
+)

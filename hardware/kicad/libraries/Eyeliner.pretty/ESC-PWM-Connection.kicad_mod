@@ -1,0 +1,94 @@
+(footprint "ESC-PWM-Connection"
+	(version 20240108)
+	(generator "pcbnew")
+	(generator_version "8.0")
+	(layer "F.Cu")
+	(property "Reference" "REF**"
+		(at 2.54 -17.78 90)
+		(unlocked yes)
+		(layer "F.SilkS")
+		(hide yes)
+		(uuid "519a618f-4e70-498c-ba62-65e85a3ff25d")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.1)
+			)
+		)
+	)
+	(property "Value" "ESC-PWM-Connection"
+		(at 2.54 -17.78 90)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "88bfac0c-bb87-4649-99bb-ae1d6df486b1")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Footprint" ""
+		(at 7.62 2.54 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "0167b76f-6c3d-4670-ba91-70f597dd6f6b")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 7.62 2.54 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "110cb353-0d61-47c0-badd-91ca48632725")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Description" ""
+		(at 7.62 2.54 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "497ba8d8-e511-4f2a-92dc-9a6ccf296297")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(attr through_hole)
+	(fp_text user "PWM"
+		(at 5.588 -3.302 90)
+		(unlocked yes)
+		(layer "F.SilkS")
+		(uuid "64606df7-86ce-4c55-9f20-52c1b17f8b40")
+		(effects
+			(font
+				(size 0.8 0.8)
+				(thickness 0.1)
+			)
+			(justify left bottom)
+		)
+	)
+	(pad "1" thru_hole rect
+		(at 5.08 -1.409068)
+		(size 2 2)
+		(drill 1)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers yes)
+		(keep_end_layers yes)
+		(uuid "56db4a5b-10ac-4598-a6e2-f7554c88f92c")
+	)
+)
