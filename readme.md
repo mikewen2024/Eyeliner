@@ -8,7 +8,7 @@ A 1lb (antweight) melty-brain combat robot built for **Design Print Destroy**, i
 **Key system requirements:** MHz-range onboard MCU, high-range accelerometer (~400g) for RPM/heading, per-motor drive current of ~30A (≈500W), and all electronics surviving constant 200–300g with peak impact accelerations orders of magnitude higher.
 
 
-**Some caveats:** I've worked on this project on and off for the last few years, with my teammate contributing to some of the codebase. Tight academic schedules have meant that iterations come and go somewhat slowly.
+To read more about the development of the project and past versions, check out my personal technical blog [here](https://future-wool-0d5.notion.site/Eyeliner-Melty-brain-Combat-Robot-2ede4d628bf380b29920f43a3518d5c0) :)
 
 ---
 
