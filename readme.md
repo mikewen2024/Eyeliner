@@ -3,7 +3,7 @@
 ![Graph Graphic](./docs/images/eyeliner_byeliner_render.png)
 ![Graph Graphic](./docs/images/eyeliner_brainrot_dec_2025.png)
 
-A 1lb (antweight) melty-brain combat robot built for **Design Print Destroy**, iRobotics' plastic antweight competition. A melty-brain spins the entire chassis at 1,000–2,000 RPM while pulsing drive motors ~100 times/second to achieve controlled translational movement — maximum hitting power, and one of the hardest archetypes to execute correctly.
+A 1lb (antweight) melty-brain combat robot. A melty-brain spins the entire chassis at 1,000–2,000 RPM while pulsing drive motors ~100 times/second to achieve controlled translational movement — maximum hitting power, and one of the hardest archetypes to execute correctly.
 
 **Key system requirements:** MHz-range onboard MCU, high-range accelerometer (~400g) for RPM/heading, per-motor drive current of ~30A (≈500W), and all electronics surviving constant 200–300g with peak impact accelerations orders of magnitude higher.
 
@@ -30,7 +30,7 @@ To read more about the development of the project and past versions, check out m
 - LED strips for better heading and state indication
 - Spare set of SPI connections for standalone ADXL375 or other sensors
 - Shock isolated mounting with bracing for connectors
-- Judicious ground plane placement for good return paths and receiver signal integrity, high-speed trace routing to reduce cross-talk and RC-loss, balancing current surge protection and voltage surge protection with 
+- Judicious ground plane placement for good return paths and receiver signal integrity, high-speed trace routing to reduce cross-talk and RC-loss, balancing current surge protection and voltage surge protection with TVS Diodes
 - Up to 2500W burst capacity on HV side via solder busses, structural stability via extensive via stitching
 - Spare GPIO connections for thermistors, IR sensors, etc...
 - DSHOT600 and DSHOT1200 for high rate and accurate motor torque control at speed, built-in twisted-pairs for signal lines with GND return paths as close as possible to ESC grounds
