@@ -37,7 +37,7 @@ To read more about the development of the project and past versions, check out m
 
 **Upcoming Changes:** 
 
-- Dual LSM6DSV320X IMUs
+- Dual H3LIS331DL accelerometers (rotational speed without knowing center of rotation), easier-to-solder footprint
 - More robust LDO system for 5V side
 - Precharge circuit for higher-voltage inputs
 - Two-way DSHOT for traction control
