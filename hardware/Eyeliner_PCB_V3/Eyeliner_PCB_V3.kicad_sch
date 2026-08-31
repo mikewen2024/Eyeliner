@@ -1,0 +1,110 @@
+(kicad_sch
+	(version 20260306)
+	(generator "eeschema")
+	(generator_version "10.0")
+	(uuid "0cbb3bbb-8297-40d4-b3a9-e92b3d8d375c")
+	(paper "A4")
+	(title_block
+		(title "Full Stack")
+		(rev "1")
+	)
+	(lib_symbols)
+	(sheet
+		(at 97.79 93.98)
+		(size 60.96 36.83)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "412ae4f7-340f-4533-804c-79c9f23b437e")
+		(property "Sheetname" "Bottom_Board"
+			(at 97.79 93.2684 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "Top_Board.kicad_sch"
+			(at 97.79 131.3946 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "Eyeliner_PCB_V3"
+				(path "/0cbb3bbb-8297-40d4-b3a9-e92b3d8d375c"
+					(page "3")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 97.79 49.53)
+		(size 60.96 36.83)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "d85da4fd-5da1-448a-b2f1-72f48de043cd")
+		(property "Sheetname" "Top_Board"
+			(at 97.79 48.8184 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "Top_Board.kicad_sch"
+			(at 97.79 86.9446 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "Eyeliner_PCB_V3"
+				(path "/0cbb3bbb-8297-40d4-b3a9-e92b3d8d375c"
+					(page "2")
+				)
+			)
+		)
+	)
+	(sheet_instances
+		(path "/"
+			(page "1")
+		)
+	)
+	(embedded_fonts no)
+)
