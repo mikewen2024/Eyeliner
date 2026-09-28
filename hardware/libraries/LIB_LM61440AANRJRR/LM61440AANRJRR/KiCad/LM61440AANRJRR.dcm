@@ -1,0 +1,9 @@
+EESchema-DOCLIB  Version 2.0
+#
+$CMP LM61440AANRJRR
+D Switching Controllers 3-V to 36-V, 4-A, low-noise synchronous step-down converter 14-VQFN-HR -40 to 150
+K
+F https://www.ti.com/lit/gpn/LM61440
+$ENDCMP
+#
+#End Doc Library

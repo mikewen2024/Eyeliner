@@ -1,0 +1,248 @@
+;Proteus Design Interchange Format
+(PDIF
+ (vendor "SamacSys Limited")
+ (version 1 0)
+ (library
+  (part "LM61440AANRJRR"
+   (description "Switching Controllers 3-V to 36-V, 4-A, low-noise synchronous step-down converter 14-VQFN-HR -40 to 150")
+   (family "ANA")
+   (package "LM61440AASQRJRRQ1")
+   (attribute "Datasheet Link" "https://www.ti.com/lit/gpn/LM61440")
+   (attribute "Geometry.Height" "1mm")
+   (attribute "Mouser Part Number" "595-LM61440AANRJRR")
+   (attribute "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Texas-Instruments/LM61440AANRJRR?qs=vmHwEFxEFR8iu%252B2xr1IAew%3D%3D")
+   (attribute "Manufacturer_Name" "Texas Instruments")
+   (attribute "Manufacturer_Part_Number" "LM61440AANRJRR")
+   (gate
+    (symbol "LM61440AANRJRR")
+    (pin "BIAS_1" 1 PS)
+    (pin "VCC" 2 PS)
+    (pin "AGND" 3 PS)
+    (pin "FB" 4 PS)
+    (pin "PGOOD_1" 5 PS)
+    (pin "RT" 6 PS)
+    (pin "EN/SYNC" 7 PS)
+    (pin "VIN1" 8 PS)
+    (pin "PGND1_1" 9 PS)
+    (pin "SW" 10 PS)
+    (pin "PGND2_1" 11 PS)
+    (pin "VIN2" 12 PS)
+    (pin "RBOOT" 13 PS)
+    (pin "CBOOT" 14 PS)
+    (pin "BIAS_2" 15 PS)
+    (pin "PGOOD_2" 16 PS)
+    (pin "PGND1_2" 17 PS)
+    (pin "PGND2_2" 18 PS)
+   )
+  )
+  (symbol "LM61440AANRJRR"
+   (units THOU)
+   (origin (pt 0 0))
+   (graphic
+    (stroke 10)
+    (path (pt 200 100) (pt 1200 100) (pt 1200 -900) (pt 200 -900) (pt 200 100) (closed))
+   )
+   (terminal
+    (body (symbol "PIN") (pt 0 0) (rot 0) (mir 0) (visible true))
+    (name (pt 230 0) (rot 0) (just MIDDLE LEFT) (visible true))
+    (number (pt 140 20) (rot 0) (just BOTTOM RIGHT) (visible true)))
+   (terminal
+    (body (symbol "PIN") (pt 0 -100) (rot 0) (mir 0) (visible true))
+    (name (pt 230 0) (rot 0) (just MIDDLE LEFT) (visible true))
+    (number (pt 140 20) (rot 0) (just BOTTOM RIGHT) (visible true)))
+   (terminal
+    (body (symbol "PIN") (pt 0 -200) (rot 0) (mir 0) (visible true))
+    (name (pt 230 0) (rot 0) (just MIDDLE LEFT) (visible true))
+    (number (pt 140 20) (rot 0) (just BOTTOM RIGHT) (visible true)))
+   (terminal
+    (body (symbol "PIN") (pt 0 -300) (rot 0) (mir 0) (visible true))
+    (name (pt 230 0) (rot 0) (just MIDDLE LEFT) (visible true))
+    (number (pt 140 20) (rot 0) (just BOTTOM RIGHT) (visible true)))
+   (terminal
+    (body (symbol "PIN") (pt 0 -400) (rot 0) (mir 0) (visible true))
+    (name (pt 230 0) (rot 0) (just MIDDLE LEFT) (visible true))
+    (number (pt 140 20) (rot 0) (just BOTTOM RIGHT) (visible true)))
+   (terminal
+    (body (symbol "PIN") (pt 0 -500) (rot 0) (mir 0) (visible true))
+    (name (pt 230 0) (rot 0) (just MIDDLE LEFT) (visible true))
+    (number (pt 140 20) (rot 0) (just BOTTOM RIGHT) (visible true)))
+   (terminal
+    (body (symbol "PIN") (pt 0 -600) (rot 0) (mir 0) (visible true))
+    (name (pt 230 0) (rot 0) (just MIDDLE LEFT) (visible true))
+    (number (pt 140 20) (rot 0) (just BOTTOM RIGHT) (visible true)))
+   (terminal
+    (body (symbol "PIN") (pt 0 -700) (rot 0) (mir 0) (visible true))
+    (name (pt 230 0) (rot 0) (just MIDDLE LEFT) (visible true))
+    (number (pt 140 20) (rot 0) (just BOTTOM RIGHT) (visible true)))
+   (terminal
+    (body (symbol "PIN") (pt 0 -800) (rot 0) (mir 0) (visible true))
+    (name (pt 230 0) (rot 0) (just MIDDLE LEFT) (visible true))
+    (number (pt 140 20) (rot 0) (just BOTTOM RIGHT) (visible true)))
+   (terminal
+    (body (symbol "PIN") (pt 1400 0) (rot 0) (mir X) (visible true))
+    (name (pt 230 0) (rot 0) (just MIDDLE LEFT) (visible true))
+    (number (pt 140 20) (rot 0) (just BOTTOM RIGHT) (visible true)))
+   (terminal
+    (body (symbol "PIN") (pt 1400 -100) (rot 0) (mir X) (visible true))
+    (name (pt 230 0) (rot 0) (just MIDDLE LEFT) (visible true))
+    (number (pt 140 20) (rot 0) (just BOTTOM RIGHT) (visible true)))
+   (terminal
+    (body (symbol "PIN") (pt 1400 -200) (rot 0) (mir X) (visible true))
+    (name (pt 230 0) (rot 0) (just MIDDLE LEFT) (visible true))
+    (number (pt 140 20) (rot 0) (just BOTTOM RIGHT) (visible true)))
+   (terminal
+    (body (symbol "PIN") (pt 1400 -300) (rot 0) (mir X) (visible true))
+    (name (pt 230 0) (rot 0) (just MIDDLE LEFT) (visible true))
+    (number (pt 140 20) (rot 0) (just BOTTOM RIGHT) (visible true)))
+   (terminal
+    (body (symbol "PIN") (pt 1400 -400) (rot 0) (mir X) (visible true))
+    (name (pt 230 0) (rot 0) (just MIDDLE LEFT) (visible true))
+    (number (pt 140 20) (rot 0) (just BOTTOM RIGHT) (visible true)))
+   (terminal
+    (body (symbol "PIN") (pt 1400 -500) (rot 0) (mir X) (visible true))
+    (name (pt 230 0) (rot 0) (just MIDDLE LEFT) (visible true))
+    (number (pt 140 20) (rot 0) (just BOTTOM RIGHT) (visible true)))
+   (terminal
+    (body (symbol "PIN") (pt 1400 -600) (rot 0) (mir X) (visible true))
+    (name (pt 230 0) (rot 0) (just MIDDLE LEFT) (visible true))
+    (number (pt 140 20) (rot 0) (just BOTTOM RIGHT) (visible true)))
+   (terminal
+    (body (symbol "PIN") (pt 1400 -700) (rot 0) (mir X) (visible true))
+    (name (pt 230 0) (rot 0) (just MIDDLE LEFT) (visible true))
+    (number (pt 140 20) (rot 0) (just BOTTOM RIGHT) (visible true)))
+   (terminal
+    (body (symbol "PIN") (pt 1400 -800) (rot 0) (mir X) (visible true))
+    (name (pt 230 0) (rot 0) (just MIDDLE LEFT) (visible true))
+    (number (pt 140 20) (rot 0) (just BOTTOM RIGHT) (visible true)))
+  )
+  (symbol "PIN"
+   (units THOU)
+   (origin (pt 0 0))
+   (graphic
+    (stroke 10)
+    (path (pt 0 0) (pt 200 0))))
+  (symbol "PINSHORT"
+   (units THOU)
+   (origin (pt 0 0))
+   (graphic
+    (stroke 10)
+    (path (pt 0 0) (pt 100 0))))
+  (package "LM61440AASQRJRRQ1"
+   (units MM)
+   (layer TASM
+    (graphic
+     (stroke 0.2)
+     (path
+      (closed true)
+      (pt -2 -1.75)
+      (pt 2 -1.75)
+      (pt 2 1.75)
+      (pt -2 1.75)
+      (pt -2 -1.75))))
+   (layer OCCA
+    (graphic
+     (stroke 0.1)
+     (path
+      (closed true)
+      (pt -4.2 2.95)
+      (pt 3.2 2.95)
+      (pt 3.2 -2.95)
+      (pt -4.2 -2.95)
+      (pt -4.2 2.95))))
+   (layer TSLK
+    (graphic
+     (stroke 0.2)
+     (path
+      (closed false)
+      (pt -3.2 1.15)
+      (arc (pt -3.200 1.150) (pt -3.200 1.100) (pt -3.100 1.200) (start 180.0) (sweep 180.0))
+      (pt -3.1 1.15)
+      (arc (pt -3.100 1.150) (pt -3.200 1.100) (pt -3.100 1.200) (start 180.0) (sweep .0))
+      (pt -3.2 1.15)
+      (arc (pt -3.200 1.150) (pt -3.200 1.100) (pt -3.100 1.200) (start 180.0) (sweep 180.0))
+      (pt -3.1 1.15))))
+   (leg 1 (pt -1.850 1.150) (padstack 1))
+   (leg 2 (pt -1.850 0.525) (padstack 2))
+   (leg 3 (pt -1.850 0.000) (padstack 3))
+   (leg 4 (pt -1.850 -0.525) (padstack 4))
+   (leg 5 (pt -1.850 -1.150) (padstack 5))
+   (leg 6 (pt -1.125 -1.600) (padstack 0))
+   (leg 7 (pt -0.625 -1.600) (padstack 0))
+   (leg 8 (pt 0.450 -1.450) (padstack 8))
+   (leg 9 (pt 1.800 -1.150) (padstack 9))
+   (leg 10 (pt 1.000 0.000) (padstack 10))
+   (leg 11 (pt 1.800 1.150) (padstack 11))
+   (leg 12 (pt 0.450 1.450) (padstack 12))
+   (leg 13 (pt -0.625 1.600) (padstack 0))
+   (leg 14 (pt -1.125 1.600) (padstack 0))
+   (leg 15 (pt -1.675 1.650) (padstack 15))
+   (leg 16 (pt -1.675 -1.650) (padstack 16))
+   (leg 17 (pt 1.600 -1.650) (padstack 17))
+   (leg 18 (pt 1.600 1.650) (padstack 18))
+   (padstack 0
+    (plated false)
+    (pad (layer TCOP) (rectf 0.250 0.700 0 0 90.000))
+   )
+   (padstack 1
+    (plated false)
+    (pad (layer TCOP) (rectf 0.400 0.700 0 0 0.000))
+   )
+   (padstack 2
+    (plated false)
+    (pad (layer TCOP) (rectf 0.250 0.700 0 0 0.000))
+   )
+   (padstack 3
+    (plated false)
+    (pad (layer TCOP) (rectf 0.300 0.700 0 0 0.000))
+   )
+   (padstack 4
+    (plated false)
+    (pad (layer TCOP) (rectf 0.250 0.700 0 0 0.000))
+   )
+   (padstack 5
+    (plated false)
+    (pad (layer TCOP) (rectf 0.400 0.700 0 0 0.000))
+   )
+   (padstack 8
+    (plated false)
+    (pad (layer TCOP) (rectf 0.400 1.000 0 0 90.000))
+   )
+   (padstack 9
+    (plated false)
+    (pad (layer TCOP) (rectf 0.400 0.800 0 0 0.000))
+   )
+   (padstack 10
+    (plated false)
+    (pad (layer TCOP) (rectf 0.400 2.400 0 0 0.000))
+   )
+   (padstack 11
+    (plated false)
+    (pad (layer TCOP) (rectf 0.400 0.800 0 0 0.000))
+   )
+   (padstack 12
+    (plated false)
+    (pad (layer TCOP) (rectf 0.400 1.000 0 0 90.000))
+   )
+   (padstack 15
+    (plated false)
+    (pad (layer TCOP) (rectf 0.350 0.600 0 0 90.000))
+   )
+   (padstack 16
+    (plated false)
+    (pad (layer TCOP) (rectf 0.350 0.600 0 0 90.000))
+   )
+   (padstack 17
+    (plated false)
+    (pad (layer TCOP) (rectf 0.400 0.600 0 0 90.000))
+   )
+   (padstack 18
+    (plated false)
+    (pad (layer TCOP) (rectf 0.400 0.600 0 0 90.000))
+   )
+   (model "LM61440AANRJRR.stp"
+    (euler 0 0 0)
+    (offset 0 0 0)
+   )
+  )
+ )
+)

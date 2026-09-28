@@ -1,0 +1,9 @@
+Manufacturer=Texas Instruments
+PartNumber=LM61440AANRJRR
+PartCategory=Integrated Circuit
+PackageCategory=Other
+PinCount=18
+Version=1.5
+Released=2020-08-06 15:21:44
+Downloaded=2026-08-31 03:31:36
+3D=Y

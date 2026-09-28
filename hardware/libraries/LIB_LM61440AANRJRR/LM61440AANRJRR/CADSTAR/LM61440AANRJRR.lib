@@ -1,0 +1,16 @@
+.LM61440AANRJRR :1 ;Switching Controllers 3-V to 36-V, 4-A, low-noise synchronous step-down converter 14-VQFN-HR -40 to 150
+LM61440AASQRJRRQ1
+*STM IC
+*NGS
+*PLB 1="BIAS_1" 2="VCC" 3="AGND" 4="FB" 5="PGOOD_1" 6="RT" 7="EN/SYNC" 8="VIN1" 9="PGND1_1" 10="SW" 11="PGND2_1" 12="VIN2" 13="RBOOT" 14="CBOOT" 15="BIAS_2" 16="PGOOD_2" 17="PGND1_2" 18="PGND2_2"
+*MXP 18
+*DFN LM61440AANRJRR
+~!Mouser Part Number (595-LM61440AANRJRR)
+~!Link Mouser Price/Stock (https://www.mouser.co.uk/ProductDetail/Texas-Instruments/LM61440AANRJRR?qs=vmHwEFxEFR8iu%252B2xr1IAew%3D%3D)
+~!Manufacturer_Name (Texas Instruments)
+~!Manufacturer_Part_Number (LM61440AANRJRR)
+~!Link Datasheet (https://www.ti.com/lit/gpn/LM61440)
+~!Height (1mm)
+~!3D_Model (LM61440AANRJRR)
+LM61440AANRJRR
+1.1!U 2.1!U 3.1!U 4.1!U 5.1!U 6.1!U 7.1!U 8.1!U 9.1!U 10.1!U 11.1!U 12.1!U 13.1!U 14.1!U 15.1!U 16.1!U 17.1!U 18.1!U 

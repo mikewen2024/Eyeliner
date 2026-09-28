@@ -1,0 +1,13 @@
+(unit MM)
+
+(package "LM61440AANRJRR"
+    (type UNDEF)
+    (uver 2)
+    (cuser "SamacSys")
+    (uuser "SamacSys")
+    (utime 2020-06-17-16:57:24)
+    (mountForm default
+        (footprintRef "LM61440AASQRJRRQ1")
+        (spec "System")
+    )
+)
