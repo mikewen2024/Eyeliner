@@ -5,14 +5,14 @@ extern "C" {
 }
 
 // I²C device address (default 0x6A if SDO = GND, 0x6B if SDO = VDD)
-#define LSM6DSV320X_I2C_ADDRESS  0x6B
+#define LSM6DSV320X_I2C_ADDRESS  0x6A
 
 // ST driver requires a handle for communication
 #define DEV_ADDR NULL
 
 #define LSM_CS 3
 
-SPISettings imuSPI(40000000, MSBFIRST, SPI_MODE0);
+// SPISettings imuSPI(40000000, MSBFIRST, SPI_MODE0);
 
 // --- Platform read/write functions for the ST driver ---
 int32_t spi_write(void *handle, uint8_t reg, const uint8_t *bufp, uint16_t len) {

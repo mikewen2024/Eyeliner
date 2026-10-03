@@ -1,0 +1,13 @@
+# ESP-IDF defaults for the xiao_esp32s3 environment (framework = espidf).
+# PlatformIO generates sdkconfig.xiao_esp32s3 from this on first build;
+# delete that file to re-apply changes made here.
+
+# XIAO ESP32-S3: 8 MB flash
+CONFIG_ESPTOOLPY_FLASHSIZE_8MB=y
+
+# Console over the native USB (USB Serial/JTAG). The default UART0 console
+# sits on GPIO43/44, which the V3 board uses as Temp_Sel1/Temp_Sel2.
+CONFIG_ESP_CONSOLE_USB_SERIAL_JTAG=y
+
+# 1 kHz tick for the control loop
+CONFIG_FREERTOS_HZ=1000

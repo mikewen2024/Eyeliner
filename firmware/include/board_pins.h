@@ -18,9 +18,15 @@
  *   SEL = LOW  -> A0/B0 -> SDA_Accel/SCL_Accel (both LSM6DSV320X)
  *   SEL = HIGH -> A1/B1 -> SDA_Extra/SCL_Extra (JST-SH connector I2C1)
  * U3 ~EN is tied to GND (always enabled).
+ *
+ * NOTE: U3 is wired crossed on the V3 board, so the schematic net names are
+ * swapped relative to what reaches the IMUs. With SEL low:
+ *   D0 (GPIO1), net "SDA" -> SCL_Accel -> IMU SCL
+ *   D1 (GPIO2), net "SCL" -> SDA_Accel -> IMU SDA
+ * The defines below are by function (what the IMU sees), not by net name.
  * ------------------------------------------------------------------------- */
-#define PIN_I2C_SDA             1   // D0      net /Top_Board/SDA
-#define PIN_I2C_SCL             2   // D1      net /Top_Board/SCL
+#define PIN_I2C_SDA             2   // D1      net /Top_Board/SCL (crossed at U3)
+#define PIN_I2C_SCL             1   // D0      net /Top_Board/SDA (crossed at U3)
 #define PIN_I2C_SEL             41  // MTDI    net /Top_Board/I2C_Sel -> U3 SEL
 
 #define I2C_SEL_LEVEL_IMU       0   // LOW : route bus to the IMUs

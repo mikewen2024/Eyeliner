@@ -23,6 +23,10 @@
 
 #include <atomic>
 
+#include "driver/gpio.h"
+#include "soc/gpio_periph.h"
+#include "soc/gpio_reg.h"
+
 #include "board_pins.h"
 #include "lsm6dsv320x_reg.h"
 
@@ -184,6 +188,56 @@ static void IRAM_ATTR onImuInt() {
  * Helpers
  * ------------------------------------------------------------------------- */
 
+// Reads back the ESP32 pad config: SDA/SCL should be OE=1 OD=1 IE=1, INT should be OE=0 IE=1
+static void printPinMode(const char *name, int pin, bool expectOpenDrainIo) {
+  uint32_t oe = pin < 32 ? (REG_READ(GPIO_ENABLE_REG) >> pin) & 1 : (REG_READ(GPIO_ENABLE1_REG) >> (pin - 32)) & 1;
+  uint32_t od = (REG_READ(GPIO_PIN0_REG + 4 * pin) >> GPIO_PIN0_PAD_DRIVER_S) & 1;
+  uint32_t ie = (REG_READ(GPIO_PIN_MUX_REG[pin]) & FUN_IE) ? 1 : 0;
+  bool ok = expectOpenDrainIo ? (oe && od && ie) : (!oe && ie);
+  Serial.printf("  %-4s GPIO%-2d output-en=%lu open-drain=%lu input-en=%lu  [%s] (expect %s)\n", name, pin,
+                (unsigned long)oe, (unsigned long)od, (unsigned long)ie, ok ? " OK " : "FAIL",
+                expectOpenDrainIo ? "open-drain I/O" : "input only");
+}
+
+// Runs a driver call and reports it by name if it returns an error
+#define CHECK(call)                                                   \
+  do {                                                                \
+    int32_t ret_ = (call);                                            \
+    Serial.printf("  [%s] %s\n", ret_ == 0 ? " OK " : "FAIL", #call); \
+  } while (0)
+
+// Registers that decide whether data is produced and routed to INT1
+static void dumpRegisters() {
+  static const struct {
+    uint8_t reg;
+    const char *name;
+    const char *meaning;
+  } REGS[] = {
+      {LSM6DSV320X_IF_CFG, "IF_CFG", "bit3 PP_OD, bit4 H_LACTIVE"},
+      {LSM6DSV320X_INT1_CTRL, "INT1_CTRL", "bit0 INT1_DRDY_XL"},
+      {LSM6DSV320X_CTRL1, "CTRL1", "[3:0] ODR_XL (6=120Hz), [6:4] OP_MODE_XL"},
+      {LSM6DSV320X_CTRL2, "CTRL2", "[3:0] ODR_G (6=120Hz), [6:4] OP_MODE_G"},
+      {LSM6DSV320X_CTRL3, "CTRL3", "bit6 BDU, bit2 IF_INC"},
+      {LSM6DSV320X_CTRL4, "CTRL4", "bit1 DRDY_PULSED"},
+      {LSM6DSV320X_CTRL1_XL_HG, "CTRL1_XL_HG", "[5:3] ODR_XL_HG, bit7 XL_HG_REGOUT_EN"},
+      {LSM6DSV320X_HAODR_CFG, "HAODR_CFG", "[1:0] HAODR_SEL"},
+      {LSM6DSV320X_STATUS_REG, "STATUS_REG", "bit0 XLDA, bit1 GDA, bit2 TDA, bit3 XLHGDA"},
+  };
+
+  delay(50); // let at least a few samples land at 120 Hz
+  Serial.println("Register readback:");
+  for (const auto &r : REGS) {
+    uint8_t val = 0;
+    int32_t ret = lsm6dsv320x_read_reg(&imu, r.reg, &val, 1);
+    if (ret != 0) {
+      Serial.printf("  0x%02X %-12s read FAILED\n", r.reg, r.name);
+    } else {
+      Serial.printf("  0x%02X %-12s 0x%02X  (%s)\n", r.reg, r.name, val, r.meaning);
+    }
+  }
+  Serial.printf("  INT pin level now: %d (active level %d)\n", digitalRead(LSM_INT_PIN), INT_ACTIVE_LEVEL);
+}
+
 static void haltWithError(const char *msg) {
   Serial.printf("[FAIL] %s\n", msg);
   while (true) delay(1000);
@@ -220,11 +274,15 @@ static bool setIntPinMode(const stmdev_ctx_t *ctx, bool openDrain, bool activeLo
 
   ifCfg.pp_od = openDrain ? 1 : 0;
   ifCfg.h_lactive = activeLow ? 1 : 0;
+  // SDA is open-drain in I2C mode (it only goes push-pull under I3C, which needs
+  // an I3C controller to assign a dynamic address). Keep its internal pull-up off
+  // too; the board has R11
+  ifCfg.sda_pu_en = 0;
   if (lsm6dsv320x_write_reg(ctx, LSM6DSV320X_IF_CFG, (uint8_t *)&ifCfg, 1) != 0) return false;
 
   lsm6dsv320x_if_cfg_t readback;
   if (lsm6dsv320x_read_reg(ctx, LSM6DSV320X_IF_CFG, (uint8_t *)&readback, 1) != 0) return false;
-  return readback.pp_od == ifCfg.pp_od && readback.h_lactive == ifCfg.h_lactive;
+  return readback.pp_od == ifCfg.pp_od && readback.h_lactive == ifCfg.h_lactive && readback.sda_pu_en == 0;
 }
 
 /* ---------------------------------------------------------------------------
@@ -251,8 +309,17 @@ void setup() {
 
   pinMode(LSM_INT_PIN, LSM_INT_ESP_PULLUP ? INPUT_PULLUP : INPUT);
 
+  // The IDF I2C driver underneath Wire sets SDA/SCL open-drain. Wire also turns on
+  // the ESP's internal pull-ups; turn those off, the board has R10/R11
   if (!IMU_WIRE.begin(LSM_SDA_PIN, LSM_SCL_PIN, LSM_I2C_FREQ_HZ)) haltWithError("Wire.begin failed");
+  gpio_pullup_dis((gpio_num_t)LSM_SDA_PIN);
+  gpio_pullup_dis((gpio_num_t)LSM_SCL_PIN);
   Serial.printf("Actual SCL: %lu Hz\n", (unsigned long)IMU_WIRE.getClock());
+
+  Serial.println("ESP32 pin modes:");
+  printPinMode("SDA", LSM_SDA_PIN, true);
+  printPinMode("SCL", LSM_SCL_PIN, true);
+  printPinMode("INT", LSM_INT_PIN, false);
 
   // Boot time after power-up
   delay(20);
@@ -286,24 +353,27 @@ void setup() {
   Serial.printf("[%s] INT idle level = %d (expect %d)\n",
                 idle != INT_ACTIVE_LEVEL ? " OK " : "WARN", idle, !INT_ACTIVE_LEVEL);
 
-  lsm6dsv320x_block_data_update_set(&imu, 1);
-  lsm6dsv320x_xl_full_scale_set(&imu, LSM6DSV320X_16g);
-  lsm6dsv320x_gy_full_scale_set(&imu, LSM6DSV320X_2000dps);
-  lsm6dsv320x_hg_xl_full_scale_set(&imu, LSM6DSV320X_320g);
+  Serial.println("Sensor config:");
+  CHECK(lsm6dsv320x_block_data_update_set(&imu, 1));
+  CHECK(lsm6dsv320x_xl_full_scale_set(&imu, LSM6DSV320X_16g));
+  CHECK(lsm6dsv320x_gy_full_scale_set(&imu, LSM6DSV320X_2000dps));
+  CHECK(lsm6dsv320x_hg_xl_full_scale_set(&imu, LSM6DSV320X_320g));
 
   // Latched: INT stays asserted until the accel output is read, so a missed
   // edge is still caught by the level check in loop()
-  lsm6dsv320x_data_ready_mode_set(&imu, LSM6DSV320X_DRDY_LATCHED);
+  CHECK(lsm6dsv320x_data_ready_mode_set(&imu, LSM6DSV320X_DRDY_LATCHED));
 
   lsm6dsv320x_pin_int_route_t route = {0};
   route.drdy_xl = 1;
-  if (lsm6dsv320x_pin_int1_route_set(&imu, &route) != 0) haltWithError("INT1 route failed");
+  CHECK(lsm6dsv320x_pin_int1_route_set(&imu, &route));
 
   attachInterrupt(digitalPinToInterrupt(LSM_INT_PIN), onImuInt, LSM_INT_ACTIVE_LOW ? FALLING : RISING);
 
-  lsm6dsv320x_xl_setup(&imu, LSM_XL_ODR, LSM6DSV320X_XL_HIGH_PERFORMANCE_MD);
-  lsm6dsv320x_gy_setup(&imu, LSM_GY_ODR, LSM6DSV320X_GY_HIGH_PERFORMANCE_MD);
-  lsm6dsv320x_hg_xl_data_rate_set(&imu, LSM_HG_ODR, 1);
+  CHECK(lsm6dsv320x_xl_setup(&imu, LSM_XL_ODR, LSM6DSV320X_XL_HIGH_PERFORMANCE_MD));
+  CHECK(lsm6dsv320x_gy_setup(&imu, LSM_GY_ODR, LSM6DSV320X_GY_HIGH_PERFORMANCE_MD));
+  CHECK(lsm6dsv320x_hg_xl_data_rate_set(&imu, LSM_HG_ODR, 1));
+
+  dumpRegisters();
 
   Serial.println("Streaming: accel [mg] | gyro [dps] | high-g accel [mg]");
 }
@@ -316,15 +386,27 @@ void loop() {
   static unsigned long lastRate = 0;
   static uint32_t lastIsrCount = 0;
   static uint32_t lastSamples = 0;
+  static uint32_t polledSamples = 0;
+  static uint32_t lastPolledSamples = 0;
+  static unsigned long lastRead = 0;
 
-  if (drdyPending || digitalRead(LSM_INT_PIN) == INT_ACTIVE_LEVEL) {
+  // INT-driven read, or a 50 ms fallback poll so data still shows up if
+  // data-ready isn't reaching the INT pin. Polled samples are counted
+  // separately so the two cases can be told apart
+  bool intActive = drdyPending || digitalRead(LSM_INT_PIN) == INT_ACTIVE_LEVEL;
+  bool pollDue = millis() - lastRead >= 50;
+  if (intActive || pollDue) {
     drdyPending = false;
+    lastRead = millis();
 
     lsm6dsv320x_data_ready_t drdy;
     if (lsm6dsv320x_flag_data_ready_get(&imu, &drdy) != 0) {
       readErrors++;
     } else {
-      if (drdy.drdy_xl && lsm6dsv320x_acceleration_raw_get(&imu, xlRaw) == 0) samples++;
+      if (drdy.drdy_xl && lsm6dsv320x_acceleration_raw_get(&imu, xlRaw) == 0) {
+        if (intActive) samples++;
+        else polledSamples++;
+      }
       if (drdy.drdy_gy) lsm6dsv320x_angular_rate_raw_get(&imu, gyRaw);
       if (drdy.drdy_hgxl) lsm6dsv320x_hg_acceleration_raw_get(&imu, hgRaw);
     }
@@ -354,11 +436,14 @@ void loop() {
 
     // Allow +-10% for ODR tolerance and timing jitter
     bool rateOk = fabsf(isrHz - LSM_XL_ODR_HZ) < 0.1f * LSM_XL_ODR_HZ;
-    Serial.printf("[%s] INT %.1f Hz, samples %.1f Hz (ODR %.0f Hz), I2C errors %lu\n",
-                  rateOk ? "RATE" : "WARN", isrHz, sampleHz, LSM_XL_ODR_HZ, (unsigned long)readErrors);
+    float polledHz = (polledSamples - lastPolledSamples) / dt;
+    Serial.printf("[%s] INT %.1f Hz, INT-driven samples %.1f Hz, polled samples %.1f Hz (ODR %.0f Hz), "
+                  "I2C errors %lu\n",
+                  rateOk ? "RATE" : "WARN", isrHz, sampleHz, polledHz, LSM_XL_ODR_HZ, (unsigned long)readErrors);
 
     lastRate = now;
     lastIsrCount = isrs;
     lastSamples = samples;
+    lastPolledSamples = polledSamples;
   }
 }

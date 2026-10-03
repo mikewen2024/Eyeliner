@@ -13053,16 +13053,6 @@
 		)
 		(uuid "ffe5a441-7572-4636-8d48-ee247a5f9a60")
 	)
-	(label "SCL_Accel"
-		(at 104.14 210.82 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "09502d62-75a7-4c22-b054-f7aa2db12321")
-	)
 	(label "INT"
 		(at 140.97 210.82 180)
 		(effects
@@ -13376,6 +13366,16 @@
 		)
 		(uuid "71ac6321-bff5-4cf4-a051-7ae30cd87029")
 	)
+	(label "SCL_Accel"
+		(at 104.14 220.98 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "738da46e-32a9-468d-aacf-48afd3794d11")
+	)
 	(label "Temp_Sel2"
 		(at 271.78 38.1 0)
 		(effects
@@ -13528,6 +13528,16 @@
 			(justify left bottom)
 		)
 		(uuid "a21a982e-aaee-4f7d-98e7-0a2c04678a48")
+	)
+	(label "SDA_Accel"
+		(at 104.14 210.82 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "a21ff225-189e-4593-bf23-a1a005281b66")
 	)
 	(label "SDA_Extra"
 		(at 104.14 215.9 0)
@@ -13688,16 +13698,6 @@
 			(justify right bottom)
 		)
 		(uuid "d6f7fd84-49f1-4c58-9788-9614f40623ca")
-	)
-	(label "SDA_Accel"
-		(at 104.14 220.98 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "d7f36af9-d364-4d25-90e2-26827504d0e3")
 	)
 	(label "Bias"
 		(at 100.33 45.72 0)
@@ -14187,7 +14187,6 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "0230b9a9-f01d-4e37-9a6c-fae6b7cf61b4")
 		(property "Reference" "U3"
 			(at 91.0433 200.66 0)
@@ -14201,7 +14200,7 @@
 			)
 		)
 		(property "Value" "TMUX154ERSW"
-			(at 91.0433 203.2 0)
+			(at 90.932 203.2 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -23360,7 +23359,7 @@
 	)
 	(symbol
 		(lib_id "Connector:Conn_01x04_Pin")
-		(at 323.85 36.83 180)
+		(at 554.228 -130.81 180)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -23371,7 +23370,7 @@
 		(fields_autoplaced yes)
 		(uuid "c45fadd5-0726-4226-94cb-0d1a938fa5b9")
 		(property "Reference" "I2C1"
-			(at 325.12 34.2899 0)
+			(at 555.498 -133.3501 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -23382,7 +23381,7 @@
 			)
 		)
 		(property "Value" "JST_SH_01x04"
-			(at 325.12 36.8299 0)
+			(at 555.498 -130.8101 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -23393,7 +23392,7 @@
 			)
 		)
 		(property "Footprint" "Connector_JST:JST_SH_SM04B-SRSS-TB_1x04-1MP_P1.00mm_Horizontal"
-			(at 323.85 36.83 0)
+			(at 554.228 -130.81 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -23404,7 +23403,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 323.85 36.83 0)
+			(at 554.228 -130.81 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -23415,7 +23414,7 @@
 			)
 		)
 		(property "Description" "Generic connector, single row, 01x04, script generated"
-			(at 323.85 36.83 0)
+			(at 554.228 -130.81 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
