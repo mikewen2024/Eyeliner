@@ -1,0 +1,18 @@
+.PCA9570GMH :1 ;NXP - PCA9570GMH - I/O EXPANDER, 4BIT, 400KHZ, XQFN-8
+PCA9570GMH
+*STM IC
+*NGS
+*PLB 1="P0" 2="P1" 3="P2" 4="VSS" 5="P3" 6="SCL" 7="SDA" 8="VDD"
+*MXP 8
+*DFN PCA9570GMH
+~!Manufacturer_Name (NXP)
+~!Manufacturer_Part_Number (PCA9570GMH)
+~!Mouser Part Number (771-PCA9570GMH)
+~!Link Mouser Price/Stock (https://www.mouser.co.uk/ProductDetail/NXP-Semiconductors/PCA9570GMH?qs=fi7yB2oewZl3pcYR0nNFiw%3D%3D)
+~!Arrow Part Number (PCA9570GMH)
+~!Link Arrow Price/Stock (https://www.arrow.com/en/products/pca9570gmh/nxp-semiconductors?utm_currency=USD&region=nac)
+~!Link Datasheet (http://www.nxp.com/docs/en/data-sheet/PCA9570.pdf)
+~!Height (-)
+~!3D_Model (PCA9570GMH)
+PCA9570GMH
+1.1!U 2.1!U 3.1!U 4.1!U 5.1!U 6.1!U 7.1!U 8.1!U 

@@ -9,7 +9,7 @@
  *   h          hold SCL low (open-drain) until the next key, for probing
  *   d          hold SDA low (open-drain) until the next key, for probing
  *   f          fast bit-bang at DIAG_FAST_HZ (default 1 MHz): address scan and
- *              WHO_AM_I read from DIAG_FAST_ADDR (default 0x6A, U5)
+ *              WHO_AM_I read from both LSM6DSV320X addresses (0x6A and 0x6B)
  *   any other  rerun the full diagnostic
  *
  * Checks:
@@ -56,10 +56,6 @@
 // Fast bit-bang clock rate and target for the 'f' command
 #ifndef DIAG_FAST_HZ
 #define DIAG_FAST_HZ 1000000UL
-#endif
-
-#ifndef DIAG_FAST_ADDR
-#define DIAG_FAST_ADDR IMU_U5_I2C_ADDR
 #endif
 
 #define LSM6DSV_WHO_AM_I_REG 0x0F
@@ -414,27 +410,34 @@ static void runFastBitBang() {
   Serial.printf("  SCL clocks %lu, late rises %lu%s\n", (unsigned long)fastSclClocks, (unsigned long)fastSclLate,
                 fastSclStuck ? ", SCL STUCK LOW" : "");
 
-  Serial.printf("WHO_AM_I (0x%02X) from 0x%02X, 5 reads:\n", LSM6DSV_WHO_AM_I_REG, DIAG_FAST_ADDR);
-  int good = 0;
-  for (int i = 0; i < 5; i++) {
-    fastResetStats();
-    uint8_t val = 0;
-    uint32_t cycles = 0;
-    bool ok = fastReadReg(DIAG_FAST_ADDR, LSM6DSV_WHO_AM_I_REG, &val, &cycles);
-    float us = cycles / (float)getCpuFrequencyMhz();
-    if (ok) {
-      bool match = val == LSM6DSV_WHO_AM_I_VAL;
-      if (match) good++;
-      Serial.printf("  read %d: 0x%02X %s  %lu SCL clocks in %.1f us (~%.0f kHz effective), late rises %lu\n", i + 1,
-                    val, match ? "OK" : "MISMATCH", (unsigned long)fastSclClocks, us, fastSclClocks * 1000.0f / us,
-                    (unsigned long)fastSclLate);
-    } else {
-      Serial.printf("  read %d: NACK  (late rises %lu%s)\n", i + 1, (unsigned long)fastSclLate,
-                    fastSclStuck ? ", SCL STUCK LOW" : "");
+  // Both LSM6DSV320X addresses (SDO/SA0 low = 0x6A, high = 0x6B)
+  static const uint8_t IMU_ADDRS[] = {0x6A, 0x6B};
+  int imusFound = 0;
+  for (uint8_t addr : IMU_ADDRS) {
+    Serial.printf("WHO_AM_I (0x%02X) from 0x%02X, 5 reads:\n", LSM6DSV_WHO_AM_I_REG, addr);
+    int good = 0;
+    for (int i = 0; i < 5; i++) {
+      fastResetStats();
+      uint8_t val = 0;
+      uint32_t cycles = 0;
+      bool ok = fastReadReg(addr, LSM6DSV_WHO_AM_I_REG, &val, &cycles);
+      float us = cycles / (float)getCpuFrequencyMhz();
+      if (ok) {
+        bool match = val == LSM6DSV_WHO_AM_I_VAL;
+        if (match) good++;
+        Serial.printf("  read %d: 0x%02X %s  %lu SCL clocks in %.1f us (~%.0f kHz effective), late rises %lu\n",
+                      i + 1, val, match ? "OK" : "MISMATCH", (unsigned long)fastSclClocks, us,
+                      fastSclClocks * 1000.0f / us, (unsigned long)fastSclLate);
+      } else {
+        Serial.printf("  read %d: NACK  (late rises %lu%s)\n", i + 1, (unsigned long)fastSclLate,
+                      fastSclStuck ? ", SCL STUCK LOW" : "");
+      }
+      delay(2);
     }
-    delay(2);
+    Serial.printf("  0x%02X: %d/5 correct (expect 0x%02X)\n", addr, good, LSM6DSV_WHO_AM_I_VAL);
+    if (good == 5) imusFound++;
   }
-  Serial.printf("WHO_AM_I: %d/5 correct (expect 0x%02X)\n", good, LSM6DSV_WHO_AM_I_VAL);
+  Serial.printf("LSM6DSV320X found: %d of 2\n", imusFound);
 
   release(DIAG_SDA_PIN);
   release(DIAG_SCL_PIN);

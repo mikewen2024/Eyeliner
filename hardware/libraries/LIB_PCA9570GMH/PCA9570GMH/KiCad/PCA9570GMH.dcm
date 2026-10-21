@@ -1,0 +1,9 @@
+EESchema-DOCLIB  Version 2.0
+#
+$CMP PCA9570GMH
+D NXP - PCA9570GMH - I/O EXPANDER, 4BIT, 400KHZ, XQFN-8
+K
+F http://www.nxp.com/docs/en/data-sheet/PCA9570.pdf
+$ENDCMP
+#
+#End Doc Library

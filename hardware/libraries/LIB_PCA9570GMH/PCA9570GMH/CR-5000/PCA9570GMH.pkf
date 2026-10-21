@@ -1,0 +1,10 @@
+(unit MM)
+
+(package "PCA9570GMH"
+    (type UNDEF)
+    (uver 2)
+    (mountForm default
+        (footprintRef "PCA9570GMH")
+        (spec "default")
+    )
+)

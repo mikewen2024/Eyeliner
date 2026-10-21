@@ -13,24 +13,18 @@
 #pragma once
 
 /* ---------------------------------------------------------------------------
- * I2C bus (4.7k pull-ups R10/R11 to 3V3 on the ESP side of the mux)
- * SDA/SCL pass through U3 (TMUX154E, 2:1 mux):
- *   SEL = LOW  -> A0/B0 -> SDA_Accel/SCL_Accel (both LSM6DSV320X)
- *   SEL = HIGH -> A1/B1 -> SDA_Extra/SCL_Extra (JST-SH connector I2C1)
- * U3 ~EN is tied to GND (always enabled).
- *
- * NOTE: U3 is wired crossed on the V3 board, so the schematic net names are
- * swapped relative to what reaches the IMUs. With SEL low:
- *   D0 (GPIO1), net "SDA" -> SCL_Accel -> IMU SCL
- *   D1 (GPIO2), net "SCL" -> SDA_Accel -> IMU SDA
- * The defines below are by function (what the IMU sees), not by net name.
+ * I2C bus: D0/D1 straight to both LSM6DSV320X and the PCA9570 (IC1, 0x24).
+ * 1k pull-ups (R13 SDA, R10 SCL), 100R series (R16 SDA, R15 SCL).
  * ------------------------------------------------------------------------- */
-#define PIN_I2C_SDA             2   // D1      net /Top_Board/SCL (crossed at U3)
-#define PIN_I2C_SCL             1   // D0      net /Top_Board/SDA (crossed at U3)
-#define PIN_I2C_SEL             41  // MTDI    net /Top_Board/I2C_Sel -> U3 SEL
+#define PIN_I2C_SDA             1   // D0      net /Top_Board/SDA
+#define PIN_I2C_SCL             2   // D1      net /Top_Board/SCL
 
-#define I2C_SEL_LEVEL_IMU       0   // LOW : route bus to the IMUs
-#define I2C_SEL_LEVEL_EXTRA     1   // HIGH: route bus to the I2C1 connector
+// No I2C mux on the current board (TMUX154E removed); MTDI is unconnected.
+// Kept only so existing code that drives the old select line still builds.
+#define PIN_I2C_SEL             41  // MTDI    (unconnected)
+
+#define I2C_SEL_LEVEL_IMU       0
+#define I2C_SEL_LEVEL_EXTRA     1
 
 /* ---------------------------------------------------------------------------
  * IMUs: two LSM6DSV320X on the same bus (via the mux above)
@@ -55,8 +49,8 @@
  * RC receiver (100R series + ESD on U8). Net names as drawn in the schematic;
  * confirm which side each name is referenced to before assigning UART RX/TX.
  * ------------------------------------------------------------------------- */
-#define PIN_RECEIVER_TX         4   // D3      net /Top_Board/Receiver_TX
-#define PIN_RECEIVER_RX         5   // D4      net /Top_Board/Receiver_RX
+#define PIN_RECEIVER_TX         6   // D5      net /Top_Board/Receiver_TX
+#define PIN_RECEIVER_RX         7   // D6      net /Top_Board/Receiver_RX
 
 /* ---------------------------------------------------------------------------
  * LEDs: level-shifted through Q1 (BSS138) to the LEDs1 connector

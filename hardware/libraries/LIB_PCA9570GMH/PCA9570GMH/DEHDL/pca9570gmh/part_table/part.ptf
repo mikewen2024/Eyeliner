@@ -1,0 +1,11 @@
+FILE_TYPE = MULTI_PHYS_TABLE;
+
+PART 'PCA9570GMH'
+CLASS = IC
+{========================================================================================}
+:"MANUFACTURER_NAME", "MANUFACTURER_PART_NUMBER"= "PART_NUMBER", "JEDEC_TYPE", "PACK_TYPE", "MOUSER_PART_NUMBER", "MOUSER_PRICE/STOCK", "ARROW_PART_NUMBER", "ARROW_PRICE/STOCK", "DESCRIPTION", "DATASHEET";
+{========================================================================================}
+ "NXP", "PCA9570GMH" (!) = "", "PCA9570GMH", "Other", "771-PCA9570GMH", "https://www.mouser.co.uk/ProductDetail/NXP-Semiconductors/PCA9570GMH?qs=fi7yB2oewZl3pcYR0nNFiw%3D%3D", "PCA9570GMH", "https://www.arrow.com/en/products/pca9570gmh/nxp-semiconductors?utm_currency=USD&region=nac", "NXP - PCA9570GMH - I/O EXPANDER, 4BIT, 400KHZ, XQFN-8", "http://www.nxp.com/docs/en/data-sheet/PCA9570.pdf"
+END_PART
+
+END.

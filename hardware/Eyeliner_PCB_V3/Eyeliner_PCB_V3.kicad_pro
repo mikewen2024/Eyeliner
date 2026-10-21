@@ -617,7 +617,7 @@
       "gencad": "",
       "idf": "",
       "netlist": "Top_Board_Netlist.net",
-      "plot": "",
+      "plot": "Top_Board_Mfg/",
       "pos_files": "",
       "specctra_dsn": "",
       "step": "",

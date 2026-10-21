@@ -1,0 +1,9 @@
+Manufacturer=NXP
+PartNumber=PCA9570GMH
+PartCategory=Integrated Circuit
+PackageCategory=Other
+PinCount=8
+Version=2.1
+Released=2018-04-18 10:40:36
+Downloaded=2026-10-03 23:05:54
+3D=Y

@@ -1,0 +1,13 @@
+(unit MM)
+
+(package "PCA9570GMH"
+    (type UNDEF)
+    (uver 2)
+    (cuser "SamacSys")
+    (uuser "SamacSys")
+    (utime 2018-10-09-10:03:11)
+    (mountForm default
+        (footprintRef "PCA9570GMH")
+        (spec "System")
+    )
+)
