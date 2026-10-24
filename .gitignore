@@ -4,3 +4,5 @@
 *-backups/
 fp-info-cache
 _autosave-*
+# Robot telemetry logs (firmware/tools/telem/telem_logger.py)
+match_logs/

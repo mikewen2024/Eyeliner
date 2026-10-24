@@ -90,3 +90,18 @@ esp_err_t imu_set_int_open_drain(const stmdev_ctx_t *ctx);
 
 // Reads whichever outputs are ready into the shared latest sample
 void imu_read_sample(void);
+
+
+/*
+Note: channel mapping for receiver inputs:
+CH1: right stick x, 2000 for full right
+CH2: right stick y, 2000 for full up
+CH3: left stick y, 2000 for full up
+CH4: left stick x, 2000 for full right
+CH5: SE
+CH6: SA, clock mode
+CH7: SB, 3 position mode
+CH8: SC, 3 position mode
+CH9: SD, single mode
+CH10: S1, 2 position
+*/
