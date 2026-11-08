@@ -1,3 +1,4 @@
 .pio/
 .vscode/
 tools/telem/.venv/
+match_logs/

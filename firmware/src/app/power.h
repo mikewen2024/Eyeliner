@@ -1,7 +1,7 @@
 /**
  * @file power.h
- * @brief Battery voltage (Vbat_Sense divider) and ESP32-S3 die temperature,
- *        sampled every VBAT_INTERVAL_MS on the comms core.
+ * @brief Battery voltage (Vbat_Sense divider, every VBAT_INTERVAL_MS) and
+ *        ESP32-S3 die temperature (every CHIP_TEMP_INTERVAL_MS) on the comms core.
  */
 #pragma once
 
@@ -11,8 +11,8 @@ struct PowerState {
   float    vbatV;        // VCC_HV, volts (ADC millivolts * VBAT_RATIO)
   uint16_t senseMv;      // raw calibrated ADC reading at the pin
   float    chipTempC;    // ESP32-S3 internal temperature sensor
-  uint32_t samples;
-  uint32_t sampleMs;     // millis() of the last sample
+  uint32_t samples;      // Vbat samples taken
+  uint32_t sampleMs;     // millis() of the last Vbat sample
 };
 
 void powerInit();

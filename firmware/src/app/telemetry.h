@@ -22,7 +22,7 @@
 
 #define TELEM_MAGIC0      'E'
 #define TELEM_MAGIC1      'Y'
-#define TELEM_VERSION     1
+#define TELEM_VERSION     3
 #define TELEM_TYPE_FAST   1
 #define TELEM_TYPE_SLOW   2
 
@@ -71,6 +71,7 @@ struct __attribute__((packed)) TelemFast {
   TelemImu imu[2];           // 0x6A, 0x6B
   uint32_t imuSeq;
   uint32_t rxSeq;
+  float    vbatV;            // v3: VCC_HV, volts, sampled every VBAT_INTERVAL_MS
 };
 
 // Loop statistics gathered by main.cpp once a second
@@ -78,13 +79,14 @@ struct SystemStats {
   uint16_t commsLoopsPerS, controlLoopsPerS;
   uint16_t commsBusyMaxUs, controlBusyMaxUs;
   uint16_t uartBytesPerS;
+  uint16_t controlLatePerS;  // control-timer ticks missed in the last second
 };
 
 // Group 2
 struct __attribute__((packed)) TelemSlow {
   TelemHeader hdr;
   uint32_t tMs;
-  float    vbatV;
+  float    vbatV;            // also in TelemFast since v3; kept here for the 1 Hz log
   uint16_t vbatSenseMv;
   float    chipTempC;
   float    imuTempC[2];
@@ -100,6 +102,8 @@ struct __attribute__((packed)) TelemSlow {
   uint8_t  imuPresentMask;   // bit0 0x6A, bit1 0x6B
   uint8_t  pcaOk;
   uint8_t  pad;
+  uint16_t controlLatePerS;  // v2: control loop ticks missed per second
+  uint16_t controlLoopHz;    // v2: configured CONTROL_LOOP_HZ
 };
 
 static_assert(sizeof(TelemFast) <= 250, "TelemFast exceeds one ESP-NOW frame");

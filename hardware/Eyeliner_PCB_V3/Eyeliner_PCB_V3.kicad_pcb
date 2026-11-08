@@ -13009,7 +13009,7 @@
 				(justify mirror)
 			)
 		)
-		(property "Value" "100 nF"
+		(property "Value" "100nF"
 			(at 0 -1.16 90)
 			(layer "B.Fab")
 			(uuid "4fd9d650-3eef-4bb5-b7db-6037cc256391")

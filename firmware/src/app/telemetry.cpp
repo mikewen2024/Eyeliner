@@ -143,6 +143,7 @@ void telemetryUpdate(const ReceiverState &rx, const ImuState &imu, const Heading
     }
     f.imuSeq = imu.seq;
     f.rxSeq = rx.seq;
+    f.vbatV = pwr.vbatV;
     send(&f, sizeof(f), s_stats.sentFast);
   }
 
@@ -173,6 +174,8 @@ void telemetryUpdate(const ReceiverState &rx, const ImuState &imu, const Heading
     s.ledMode = led.mode;
     s.imuPresentMask = (imu.imu[0].present ? 1 : 0) | (imu.imu[1].present ? 2 : 0);
     s.pcaOk = led.pcaOk;
+    s.controlLatePerS = stats.controlLatePerS;
+    s.controlLoopHz = (uint16_t)CONTROL_LOOP_HZ;
     send(&s, sizeof(s), s_stats.sentSlow);
   }
 }

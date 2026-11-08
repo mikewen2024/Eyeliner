@@ -8,6 +8,8 @@
  */
 #include <Arduino.h>
 
+#include "driver/gptimer.h"
+
 #include "config.h"
 #include "heading.h"
 #include "imu.h"
@@ -29,15 +31,57 @@ static volatile uint32_t s_controlLoops = 0;
 static volatile uint32_t s_controlRxSeq = 0;
 static volatile uint32_t s_controlBusyMaxUs = 0;   // longest loop body since last report
 static volatile uint32_t s_controlBusySumUs = 0;   // summed loop body time since last report
+static volatile uint32_t s_controlLateTicks = 0;   // timer ticks that found the task still busy
+static TaskHandle_t      s_controlTaskHandle = nullptr;
+
+// The loop body measures ~50 us; at 32 kHz it never catches up and the board
+// locks up, at 16 kHz it runs at ~80 % with a few late ticks per second
+static_assert(CONTROL_LOOP_HZ >= 100 && CONTROL_LOOP_HZ <= 20000, "CONTROL_LOOP_HZ out of range (loop body ~50 us)");
+
+// GPTimer alarm, on core 1 (registered from the control task): wake the loop
+static bool IRAM_ATTR onControlTimer(gptimer_handle_t, const gptimer_alarm_event_data_t *, void *) {
+  BaseType_t woken = pdFALSE;
+  vTaskNotifyGiveFromISR(s_controlTaskHandle, &woken);
+  return woken == pdTRUE;
+}
+
+static bool startControlTimer() {
+  gptimer_handle_t timer = nullptr;
+  gptimer_config_t cfg = {};
+  cfg.clk_src = GPTIMER_CLK_SRC_DEFAULT;
+  cfg.direction = GPTIMER_COUNT_UP;
+  cfg.resolution_hz = 1000000;  // 1 us ticks
+  if (gptimer_new_timer(&cfg, &timer) != ESP_OK) return false;
+  gptimer_event_callbacks_t cbs = {};
+  cbs.on_alarm = onControlTimer;
+  if (gptimer_register_event_callbacks(timer, &cbs, nullptr) != ESP_OK) return false;
+  gptimer_alarm_config_t alarm = {};
+  alarm.alarm_count = 1000000 / CONTROL_LOOP_HZ;
+  alarm.reload_count = 0;
+  alarm.flags.auto_reload_on_alarm = true;
+  if (gptimer_set_alarm_action(timer, &alarm) != ESP_OK) return false;
+  if (gptimer_enable(timer) != ESP_OK) return false;
+  return gptimer_start(timer) == ESP_OK;
+}
 
 static volatile bool     s_motorsOk = false;
 
 static void controlTask(void *) {
   s_controlCore = xPortGetCoreID();
+  s_controlTaskHandle = xTaskGetCurrentTaskHandle();
   headingReset();
   s_motorsOk = motorInit();
-  TickType_t wake = xTaskGetTickCount();
+  bool timerOk = startControlTimer();
   for (;;) {
+    // Block until the timer fires. A count above 1 means ticks were missed
+    // while the previous iteration was still running; fall back to a 1 ms
+    // delay if the timer never started
+    if (timerOk) {
+      uint32_t n = ulTaskNotifyTake(pdTRUE, pdMS_TO_TICKS(10));
+      if (n > 1) s_controlLateTicks = s_controlLateTicks + (n - 1);
+    } else {
+      vTaskDelay(1);
+    }
     uint32_t t0 = micros();
     ReceiverState rx = receiverGet();
     ImuState imu = imuGet();
@@ -68,7 +112,6 @@ static void controlTask(void *) {
     uint32_t busy = micros() - t0;
     s_controlBusySumUs = s_controlBusySumUs + busy;
     if (busy > s_controlBusyMaxUs) s_controlBusyMaxUs = busy;
-    vTaskDelayUntil(&wake, pdMS_TO_TICKS(1));
   }
 }
 
@@ -132,15 +175,16 @@ static void commsTask(void *) {
       stats.commsBusyMaxUs = (uint16_t)(busyMax > 65535 ? 65535 : busyMax);
       stats.controlLoopsPerS = (uint16_t)(cl - lastControlLoops);
       stats.controlBusyMaxUs = (uint16_t)(s_controlBusyMaxUs > 65535 ? 65535 : s_controlBusyMaxUs);
+      stats.controlLatePerS = (uint16_t)(s_controlLateTicks > 65535 ? 65535 : s_controlLateTicks);
       stats.uartBytesPerS = (uint16_t)(rxs.uartBytes - lastUartBytes);
 #ifdef DISPLAY_SERIAL
       uint32_t n = cl - lastControlLoops, sum = s_controlBusySumUs;
       Serial.printf("[cores] comms core %d: %lu loops/s, busy avg %lu us max %lu us, uart %lu B/s | "
-                    "control core %d: %lu loops/s, busy avg %lu us max %lu us | motors %s\n",
+                    "control core %d: %lu loops/s (target %d), busy avg %lu us max %lu us, late ticks %lu | motors %s\n",
                     xPortGetCoreID(), (unsigned long)loops, (unsigned long)(loops ? busySum / loops : 0),
                     (unsigned long)busyMax, (unsigned long)stats.uartBytesPerS, s_controlCore, (unsigned long)n,
-                    (unsigned long)(n ? sum / n : 0), (unsigned long)s_controlBusyMaxUs,
-                    s_motorsOk ? "ok" : "INIT FAILED");
+                    CONTROL_LOOP_HZ, (unsigned long)(n ? sum / n : 0), (unsigned long)s_controlBusyMaxUs,
+                    (unsigned long)s_controlLateTicks, s_motorsOk ? "ok" : "INIT FAILED");
       LedState led = ledsGet();
       static const char *ledModeName[] = {"melty", "tank", "failsafe"};
       Serial.printf("[led] %s rgb %3u %3u %3u arc %d | %lu frames | PCA9570 %s\n",
@@ -161,6 +205,7 @@ static void commsTask(void *) {
 #endif
       s_controlBusySumUs = 0;
       s_controlBusyMaxUs = 0;
+      s_controlLateTicks = 0;
       lastControlLoops = cl;
       lastUartBytes = rxs.uartBytes;
       loops = busySum = busyMax = 0;

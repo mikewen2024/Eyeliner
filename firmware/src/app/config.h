@@ -23,6 +23,17 @@
 #define CONTROL_TASK_PRIORITY  10
 #define CONTROL_TASK_STACK     8192
 
+// Control loop rate: a hardware timer on core 1 wakes the control task, so
+// this is not tied to the 1 kHz FreeRTOS tick. Each loop sends one DShot frame
+// per ESC, so this is also the DShot frame rate; AM32 is known good at 8 kHz
+// (Betaflight's maximum), higher is untested on the ESC. Heading resolution
+// per loop at 2000 rpm: 12 deg at 1 kHz, 1.5 deg at 8 kHz, 0.75 deg at 16 kHz.
+// Measured 2026-10-24: body ~46 us avg / ~100 us max; 8 kHz = 37 % of core 1
+// with zero late ticks, 16 kHz = 80 % with ~35 late ticks/s, 32 kHz hangs.
+#ifndef CONTROL_LOOP_HZ
+#define CONTROL_LOOP_HZ        8000
+#endif
+
 #define COMMS_TASK_CORE        0
 #define COMMS_TASK_PRIORITY    5
 #define COMMS_TASK_STACK       8192
@@ -213,7 +224,7 @@
 #endif
 
 #ifndef MOTOR_HEADING_THRESHOLD
-#define MOTOR_HEADING_THRESHOLD    0.96f  // |cos| above this: stick direction is aligned with heading
+#define MOTOR_HEADING_THRESHOLD    0.92f  // |cos| above this: stick direction is aligned with heading
 #endif
 #ifndef MOTOR_TRANSLATION_DEAD_ZONE
 #define MOTOR_TRANSLATION_DEAD_ZONE 0.1f  // on D (see MOTOR_TRANSLATION_SQUARED)
@@ -228,7 +239,7 @@
 #define MOTOR_AGGRESSION           1.0f   // 0..1, how hard dips/spikes push towards the limits
 #endif
 #ifndef MOTOR_REVERSE_THROTTLE
-#define MOTOR_REVERSE_THROTTLE     1      // 1 = braking side may reverse, 0 = only dips
+#define MOTOR_REVERSE_THROTTLE     0      // 1 = braking side may reverse, 0 = only dips
 #endif
 #ifndef MOTOR_MAX_THROTTLE
 #define MOTOR_MAX_THROTTLE         0.30f  // hard clamp on |throttle| per motor in every mode; 1.0 for driving
@@ -312,7 +323,10 @@
  * No current-sense hardware exists for 3V3 or 5V on the XIAO or the board.
  * ------------------------------------------------------------------------- */
 #ifndef VBAT_INTERVAL_MS
-#define VBAT_INTERVAL_MS           1000   // Vbat_Sense ADC read + divider maths every N ms
+#define VBAT_INTERVAL_MS           10     // Vbat_Sense ADC read + divider maths every N ms (feeds the fast telemetry group)
+#endif
+#ifndef CHIP_TEMP_INTERVAL_MS
+#define CHIP_TEMP_INTERVAL_MS      1000   // ESP32-S3 die temperature read every N ms
 #endif
 #ifndef VBAT_RATIO
 #define VBAT_RATIO                 VBAT_DIVIDER_RATIO  // 11.0 from board_pins.h
@@ -322,8 +336,8 @@
  * ESP-NOW telemetry (comms task, core 0; only built with ESP_NOW defined).
  * Broadcast, two packed little-endian frame types, see telemetry.h:
  *   group 1 "fast": heading, stop-logic registers, motor outputs, link stats,
- *                   both IMUs                       every ESPNOW_FAST_INTERVAL_MS
- *   group 2 "slow": battery, chip temperature, loop and bus statistics
+ *                   both IMUs, battery voltage      every ESPNOW_FAST_INTERVAL_MS
+ *   group 2 "slow": battery (V + raw mV), chip temperature, loop and bus statistics
  *                                                   every ESPNOW_SLOW_INTERVAL_MS
  * ------------------------------------------------------------------------- */
 #ifndef ESPNOW_WIFI_CHANNEL

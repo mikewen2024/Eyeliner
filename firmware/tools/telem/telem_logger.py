@@ -26,11 +26,11 @@ import serial.tools.list_ports
 
 # --- Frame layout: keep in sync with firmware/src/app/telemetry.h -------------------
 MAGIC = (ord("E"), ord("Y"))
-VERSION = 1
+VERSION = 3
 TYPE_FAST, TYPE_SLOW = 1, 2
 HDR_FMT = "<BBBBHH"  # magic0 magic1 type version len seq
 
-FAST_FMT = HDR_FMT + "I" + "fff" + "fffff" + "ff" + "ff" + "HH" + "BBBB" + "4h" + "18f" + "II"
+FAST_FMT = HDR_FMT + "I" + "fff" + "fffff" + "ff" + "ff" + "HH" + "BBBB" + "4h" + "18f" + "II" + "f"
 FAST_FIELDS = (
     ["magic0", "magic1", "type", "version", "len", "seq", "t_ms",
      "heading_deg", "rate_dps", "k",
@@ -39,15 +39,16 @@ FAST_FIELDS = (
      "mode", "flags", "lq", "rssi_rx",
      "ch_left_x", "ch_left_y", "ch_right_y", "ch_right_x"]
     + [f"imu{n}_{q}_{a}" for n in ("A", "B") for q in ("acc", "gyr", "hg") for a in "xyz"]
-    + ["imu_seq", "rx_seq"]
+    + ["imu_seq", "rx_seq", "vbat_v"]
 )
-SLOW_FMT = HDR_FMT + "I" + "f" + "H" + "f" + "ff" + "HHHHH" + "II" + "I" + "I" + "II" + "I" + "BBBB"
+SLOW_FMT = HDR_FMT + "I" + "f" + "H" + "f" + "ff" + "HHHHH" + "II" + "I" + "I" + "II" + "I" + "BBBB" + "HH"
 SLOW_FIELDS = [
     "magic0", "magic1", "type", "version", "len", "seq", "t_ms",
     "vbat_v", "vbat_sense_mv", "chip_temp_c", "imuA_temp_c", "imuB_temp_c",
     "comms_loops_s", "control_loops_s", "comms_busy_max_us", "control_busy_max_us", "uart_bytes_s",
     "imuA_errors", "imuB_errors", "led_frames", "motor_frames", "espnow_sent", "espnow_failed",
     "free_heap", "led_mode", "imu_present_mask", "pca_ok", "pad",
+    "control_late_s", "control_loop_hz",
 ]
 assert len(FAST_FIELDS) == len(struct.unpack(FAST_FMT, bytes(struct.calcsize(FAST_FMT))))
 assert len(SLOW_FIELDS) == len(struct.unpack(SLOW_FMT, bytes(struct.calcsize(SLOW_FMT))))
@@ -231,7 +232,7 @@ def run_plot(history, slow_state, stats, window, stop):
     from matplotlib.animation import FuncAnimation
 
     plt.rcParams["toolbar"] = "None"
-    fig, axes = plt.subplots(6, 1, sharex=True, figsize=(12, 10))
+    fig, axes = plt.subplots(7, 1, sharex=True, figsize=(12, 11))
     fig.canvas.manager.set_window_title("Eyeliner telemetry")
     panels = [
         ("heading [deg]", ["heading_deg"], (0, 360)),
@@ -240,6 +241,7 @@ def run_plot(history, slow_state, stats, window, stop):
         ("stop logic", ["heading_cos", "M", "translation"], (-1.05, 1.05)),
         ("IMU radial (Y) high-g [m/s2]", ["imuA_hg_y", "imuB_hg_y"], None),
         ("link", ["lq", "rssi_rx"], (0, 110)),
+        ("battery [V]", ["vbat_v"], None),
     ]
     lines = {}
     for ax, (title, keys, ylim) in zip(axes, panels):
@@ -273,7 +275,7 @@ def run_plot(history, slow_state, stats, window, stop):
             sl = slow_state.get()
             status.set_text(
                 f"mode {MODE_NAMES.get(last['mode'], '?'):5s} {state:14s} hdg {last['heading_deg']:6.1f}  "
-                f"rate {last['rate_dps']:7.1f} dps  K {last['k']:5.1f} | vbat {sl.get('vbat_v', float('nan')):5.2f} V  "
+                f"rate {last['rate_dps']:7.1f} dps  K {last['k']:5.1f} | vbat {last['vbat_v']:5.2f} V  "
                 f"chip {sl.get('chip_temp_c', float('nan')):4.1f} C | frames {rate:5.1f}/s  lost {lost}  "
                 f"dongle RSSI {last['dongle_rssi']} dBm")
         return list(lines.values()) + [status]
@@ -329,9 +331,10 @@ def main():
                 sl = slow_state.get()
                 with history.lock:
                     last = history.rows[-1][1] if history.rows else None
-                hdg = f"hdg {last['heading_deg']:6.1f} mode {MODE_NAMES.get(last['mode'], '?')}" if last else "no fast frame yet"
+                hdg = (f"hdg {last['heading_deg']:6.1f} mode {MODE_NAMES.get(last['mode'], '?')} vbat {last['vbat_v']:5.2f} V"
+                       if last else "no fast frame yet")
                 print(f"{rate:5.1f} fast/s  total fast {nf} slow {ns} lost {lost} bad {decoder.bad} | {hdg} | "
-                      f"vbat {sl.get('vbat_v', float('nan')):5.2f} V", flush=True)
+                      f"chip {sl.get('chip_temp_c', float('nan')):4.1f} C", flush=True)
                 if args.duration and time.time() - t_start > args.duration:
                     break
         else:
